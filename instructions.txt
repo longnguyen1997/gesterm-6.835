@@ -1,0 +1,13 @@
+To build python 3.7 wrapper:
+Compile/build swig-rel-2.0.9 from source and sudo make install
+Move the required files from the tutorial page to a folder
+Run link.sh (find in the Python3 version folder)
+Verify with swig -version on command line
+
+To build GRT wrapper:
+Download the git pull request from GRT repo
+sudo rm -rf /usr/local/share/swig to completely purge swig 2.0.9 (need swig 3.0 to build the GRT wrapper)
+brew install swig to get swig v3
+Make and install the GRT wrapper
+
+Test by running python3 and importing GRT and Leap 
