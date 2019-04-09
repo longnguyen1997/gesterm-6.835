@@ -28,6 +28,15 @@ def next_iterm_pane():
     time.sleep(0.25)
 
 
+def prev_iterm_pane():
+    global keyboard
+    keyboard.press(Key.cmd)
+    keyboard.press('[')
+    keyboard.release('[')
+    keyboard.release(Key.cmd)
+    time.sleep(0.25)
+
+
 class CircleListener(Leap.Listener):
 
     def __print_frame_info__(self, f):
@@ -35,7 +44,7 @@ class CircleListener(Leap.Listener):
             f.id, f.timestamp, len(f.hands), len(f.fingers)))
 
     def on_connect(self, controller):
-        CONNECTED = True
+        # CONNECTED = True
         print("Connected to the Leap Motion sensor.")
 
     def on_frame(self, controller):
@@ -63,7 +72,7 @@ class CircleListener(Leap.Listener):
                     keyboard.release(Key.enter)
                     time.sleep(0.25)
 
-                    next_iterm_pane()
+                    prev_iterm_pane()
 
                     print('Circle gesture #%d completed.'
                           % CURRENT_CIRCLE_ID)
@@ -91,12 +100,12 @@ def main():
     keyboard = Keyboard.Controller()
 
     # Wait for the Leap Motion sensor to come online.
-    while not CONNECTED:
-        time.sleep(2)
+    # while not CONNECTED:
+    #     time.sleep(2)
 
     # Keep this process running until Enter is pressed
     print('Note that gesture IDs may not be incremental.')
-    print('TODO: Fix keypress generation to support uppercase letters and special characters.')
+    print('TODO: Fix keypress generation to support uppercase letters and special characters (security issue with macOS).')
     print("Running now, press Enter to quit at any time...")
     try:
         sys.stdin.readline()
