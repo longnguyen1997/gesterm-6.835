@@ -18,7 +18,14 @@ To do so:
 1. Download the GRT repo and checkout the pull request from the article above. Google/StackOverflow will show you how to download PRs onto a repo.
 2. Run `sudo rm -rf /usr/local/share/swig` to completely purge `swig 2.0.9` (we need `swig 3.0` to build the GRT wrapper).
 3. `brew install swig` to get `swig v3`.
-4. Make and install the GRT wrapper from source, similar to what was done with LeapSDK.
+4. Make and install the GRT wrapper from source, similar to what was done with LeapSDK:
+```
+cd dependencies/grt/build/
+mkdir tmp && cd tmp
+make -j
+cd python
+python3 hello_world_example.py ../../../data/IrisData.grt
+```
 
 ## Test success
 

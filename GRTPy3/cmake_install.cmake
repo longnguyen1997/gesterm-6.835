@@ -1,4 +1,4 @@
-# Install script for directory: /Users/longnguyen/Desktop/Code/dependencies/grt/build/python
+# Install script for directory: /Users/longnguyen/Downloads/6835-final-project/dependencies/grt/build/python
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
