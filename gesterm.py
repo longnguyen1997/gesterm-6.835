@@ -19,32 +19,27 @@ SWIPE_COMMAND = 'ssh lpn@uat.mit.edu'
 CIRCLE_COMMAND = 'neofetch'
 
 
-def new_iterm_pane():
-    global keyboard
-    keyboard.press(Key.cmd)
-    keyboard.press(Key.shift)
-    keyboard.press('d')
-    keyboard.release('d')
-    keyboard.release(Key.shift)
-    keyboard.release(Key.cmd)
+def macOS_alert(message):
+    os.system("""
+        osascript -e 'display notification "%s" with title "%s"'
+        """ % (message, 'GesTerm'))
 
 
-def next_iterm_pane():
-    global keyboard
-    keyboard.press(Key.cmd)
-    keyboard.press(']')
-    keyboard.release(']')
-    keyboard.release(Key.cmd)
-    time.sleep(0.25)
-
-
-def prev_iterm_pane():
-    global keyboard
-    keyboard.press(Key.cmd)
-    keyboard.press('[')
-    keyboard.release('[')
-    keyboard.release(Key.cmd)
-    time.sleep(0.25)
+args = sys.argv
+if len(args) >= 3:
+    if args[1] == 'circle':
+        CIRCLE_COMMAND = args[2]
+        macOS_alert('You just set your circle command to: %s.' % args[2])
+    if args[1] == 'swipe':
+        SWIPE_COMMAND = args[2]
+        macOS_alert('You just set your swipe command to: %s.' % args[2])
+    if len(args) == 5:
+        if args[3] == 'swipe':
+            SWIPE_COMMAND = args[4]
+            macOS_alert('You just set your swipe command to: %s.' % args[2])
+        if args[3] == 'circle':
+            CIRCLE_COMMAND = args[4]
+            macOS_alert('You just set your circle command to: %s.' % args[2])
 
 
 class GesTermListener(Leap.Listener):
@@ -64,11 +59,15 @@ class Listener(GesTermListener):
 
     def on_connect(self, controller):
         controller.enable_gesture(Leap.Gesture.TYPE_CIRCLE)
+
+        # Variable settings for thresholds.
         controller.config.set("Gesture.Circle.MinRadius", 50.0)
         controller.config.set("Gesture.Circle.MinArc", 0.8 * 3.14)
         controller.config.save()
 
         controller.enable_gesture(Leap.Gesture.TYPE_SWIPE)
+
+        # Variable settings for thresholds.
         controller.config.set("Gesture.Swipe.MinLength", 200.0)
         controller.config.set("Gesture.Swipe.MinVelocity", 200)
         controller.config.save()
@@ -86,14 +85,15 @@ class Listener(GesTermListener):
         for gesture in gestures:
             # CIRCLE
             if gesture.type == Leap.Gesture.TYPE_CIRCLE:
-                if self.swipe: return
+                if self.swipe:
+                    return
                 self.circle = True
                 circle = Leap.CircleGesture(gesture)
                 state = circle.state
-                # if state == Leap.Gesture.STATE_START:
-                #     print('Started circle gesture.')
+                if state == Leap.Gesture.STATE_START:
+                    macOS_alert('Started circle gesture.')
                 if state == Leap.Gesture.STATE_STOP:
-                    print('Circle gesture completed.')
+                    macOS_alert('Circle gesture completed.')
                     time.sleep(0.3)
                     k.type_string(CIRCLE_COMMAND)
                     keyboard.press(Key.enter)
@@ -101,14 +101,16 @@ class Listener(GesTermListener):
                     self.circle = False
             # SWIPE
             if gesture.type == Leap.Gesture.TYPE_SWIPE:
-                if self.circle: return
+                if self.circle:
+                    return
                 self.swipe = True
                 swipe = Leap.SwipeGesture(gesture)
                 state = swipe.state
-                # if state == Leap.Gesture.STATE_START:
-                #     print('Started swipe gesture.')
+                if state == Leap.Gesture.STATE_START:
+                    macOS_alert('Started swipe gesture.')
                 if state == Leap.Gesture.STATE_STOP:
-                    print('Swipe gesture in direction %s completed.' % swipe.direction)
+                    macOS_alert('Swipe gesture in direction %s completed.' %
+                          swipe.direction)
                     time.sleep(0.3)
                     k.type_string(SWIPE_COMMAND)
                     keyboard.press(Key.enter)
@@ -121,11 +123,9 @@ def main():
     # Set up the Leap Motion sensor.
     listener = Listener()
     controller = Leap.Controller()
+    # Allow background data collection.
     controller.set_policy(Leap.Controller.POLICY_BACKGROUND_FRAMES)
     controller.set_policy(Leap.Controller.POLICY_IMAGES)
-
-
-
 
     # controller.config.save()
     # Have the listener receive events from the controller.
