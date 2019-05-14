@@ -36,10 +36,10 @@ if len(args) >= 3:
     if len(args) == 5:
         if args[3] == 'swipe':
             SWIPE_COMMAND = args[4]
-            macOS_alert('You just set your swipe command to: %s.' % args[2])
+            macOS_alert('You just set your swipe command to: %s.' % args[4])
         if args[3] == 'circle':
             CIRCLE_COMMAND = args[4]
-            macOS_alert('You just set your circle command to: %s.' % args[2])
+            macOS_alert('You just set your circle command to: %s.' % args[4])
 
 
 class GesTermListener(Leap.Listener):
