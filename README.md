@@ -1,5 +1,27 @@
 # GesTerm - Gestural macros for a better command line experience
 
+## Files / table of contents for the project
+
+- `imports.py`: Basic file importing some barebones libraries required. Not used in final implementation.
+- `gesterm.py`: Final iteration of the project. Contains all the logic and code necessary for gesture detection, command execution, and operating system alerts (macOS).
+- `requirements.txt`: A `pip3 freeze` of my working Python 3 environment at the time of submission. Please run `python3 -m pip install -r requirements.txt` or `pip3 install -r requirements.txt` before running the system.
+- `{user-training, studio-demo, implementation-demo, discrete-timewarp}.py`: These are all deprecated files that serve no purpose for the system as it is now. Refer to these as needed for my thought process during initial project stages.
+- `{deploy, cleanup}.sh`: Deprecated shell scripts that aided in initializing and refreshing GesTerm every 15 seconds and cleanup once the user decides to exit. No longer necessary or functional, as `gesterm.py` now takes in arguments.
+
+The folder `LeapSDKPy3` is *crucial* to running the system, as GesTerm depends on the Leap Motion SDK ported over to Python 3.7.
+
+## Running the system.
+
+Documented in the writeup PDF as well. Run
+
+```
+{pip3 install -r requirements.txt} OR {python3 -m pip install -r requirements.txt}
+python3 gesterm.py swipe ‘cmd1’ circle ‘cmd2’
+```
+
+to get started with GesTerm. Provide your own commands for `cmd1` and `cmd2`.
+
+
 ## Building a `python3` wrapper around LeapSDK on macOS Mojave
 
 Note that this is for a Python 3.7 wrapper around LeapSDK, which natively supports Python 2. *Note that this assumes an already installed Python 3.7, preferably one that has been installed through* `brew`. *You should also have System Integrity Protection (SIP) disabled!*
